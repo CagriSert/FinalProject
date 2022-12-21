@@ -1,5 +1,6 @@
 ﻿using DataAccess.Abstract;
 using Entites.Concrete;
+using Entites.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +52,11 @@ namespace DataAccess.Concrete.InMemory
         {
             return  _products.Where(x => x.CategoryId == categoryId).ToList();
 
+        }
+
+        public List<ProductDetailDto> GetProductDetails()
+        {
+            throw new NotImplementedException();
         }
 
         public void Update(Product product)
