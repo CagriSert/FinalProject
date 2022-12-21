@@ -1,5 +1,5 @@
-﻿using Entites.Concrete;
-using System.Collections.Generic;
+﻿using Core.DataAcces;
+using Entites.Concrete;
 
 namespace DataAccess.Abstract
 {
