@@ -1,8 +1,10 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entites.Concrete;
 using Entites.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
@@ -23,35 +25,40 @@ namespace Business.Concrete
         {
             if (product.ProductName.Length < 2)
             {
-                return new ErrorResult("Ürün İsmi en az 2 karakter olmalıdır");
+                return new ErrorResult(Messages.ProductNameInvalid);
             }
 
-            _productDal.Add(product); 
+            _productDal.Add(product);
 
-            return new SueccessResult();
+            return new SueccessResult(Messages.ProductAdded);
         }
 
-        public List<Product> GetAll()
+        public IDataResult<List<Product>> GetAll()
         {
-            return _productDal.GetAll();
+            if (DateTime.Now.Hour == 22)
+            {
+                return new ErrorDataResult();
+            }
+            var data = _productDal.GetAll(); ;
+            return new SuccessDataResult<List<Product>>(data, true, "Ürünler listelendi");
         }
 
-        public List<Product> GetAllByCategoryId(int id)
+        public IDataResult<List<Product>> GetAllByCategoryId(int id)
         {
             return _productDal.GetAll(x => x.CategoryId == id);
         }
 
-        public Product GetById(int id)
+        public IDataResult<Product> GetById(int id)
         {
             return _productDal.Get(x => x.ProductId == id);
         }
 
-        public List<Product> GetByUnitPrice(decimal min, decimal max)
+        public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
         {
             return _productDal.GetAll(x => x.UnitPrice >= min && x.UnitPrice <= max);
         }
 
-        public List<ProductDetailDto> GetProductDetails()
+        public IDataResult<List<Product>> GetProductDetails()
         {
             return _productDal.GetProductDetails();
         }
