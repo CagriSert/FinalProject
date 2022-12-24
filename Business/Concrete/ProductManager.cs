@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entites.Concrete;
 using Entites.DTOs;
@@ -17,6 +18,19 @@ namespace Business.Concrete
         {
             this._productDal = productDal;
         }
+
+        public IResult Add(Product product)
+        {
+            if (product.ProductName.Length < 2)
+            {
+                return new ErrorResult("Ürün İsmi en az 2 karakter olmalıdır");
+            }
+
+            _productDal.Add(product); 
+
+            return new SueccessResult();
+        }
+
         public List<Product> GetAll()
         {
             return _productDal.GetAll();
@@ -25,6 +39,11 @@ namespace Business.Concrete
         public List<Product> GetAllByCategoryId(int id)
         {
             return _productDal.GetAll(x => x.CategoryId == id);
+        }
+
+        public Product GetById(int id)
+        {
+            return _productDal.Get(x => x.ProductId == id);
         }
 
         public List<Product> GetByUnitPrice(decimal min, decimal max)
